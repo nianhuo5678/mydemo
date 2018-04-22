@@ -7,5 +7,5 @@ class User(models.Model):
     username = models.TextField(max_length=30, blank=True, null=True)
     password = models.TextField(max_length=80, blank=True, null=True)
     is_admin = models.BooleanField(default=False)
-    info = models.TextField(max_length=1000, null=True, blank=True)
+    info = models.TextField(max_length=499, null=True, blank=True)
 

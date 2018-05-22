@@ -1,4 +1,4 @@
-# coding=utf-8
+# -*- encoding: utf-8 -*-
 
 from django.db import models
 from django.utils import timezone
@@ -10,12 +10,18 @@ class User(models.Model):
     is_admin = models.BooleanField(default=False)
     info = models.TextField(max_length=300, null=True, blank=True)
 
+    class Meta:
+        ordering = ('id',)
+
 
 class Article(models.Model):
     title = models.TextField(max_length=50)
-    User = models.ForeignKey(User)
+    user = models.ForeignKey(User)
     content = models.TextField(max_length=2000)
     pub_date = models.DateField(default=timezone.now)
+
+    class Meta:
+        ordering = ('id',)
 
 
 class Comment(models.Model):
@@ -23,3 +29,6 @@ class Comment(models.Model):
     article = models.ForeignKey(Article)
     content = models.TextField(max_length=500)
     pub_date = models.DateField(default=timezone.now)
+
+    class Meta:
+        ordering = ('id',)

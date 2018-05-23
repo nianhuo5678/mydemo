@@ -18,10 +18,12 @@ from blog import views
 
 
 router = DefaultRouter()
-router.register(r'users', views.UserViewSet)
+router.register(r'authors', views.AuthorViewSet)
 router.register(r'articles', views.ArticleViewSet)
 router.register(r'comments', views.CommentViewSet)
 
+
 urlpatterns = [
-    url(r'^', include(router.urls))
+    url(r'^', include(router.urls)),
+    url(r'^login', views.my_login)
 ]

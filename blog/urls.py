@@ -4,10 +4,10 @@ from . import views
 
 
 router = DefaultRouter()
-router.register(r'users', views.UserViewSet)
-router.register(r'articles', views.ArticleViesSet)
-router.register(r'comments', views.CommentViewSet)
+# router.register(r'authors', views.ArticleViewSet)
+# router.register(r'articles', views.ArticleViesSet)
+# router.register(r'comments', views.CommentViewSet)
 
-urlpatterns = [
-    url(r'^', include(router.urls))
-]
+# urlpatterns = [
+#     url(r'^', include(router.urls))
+# ]

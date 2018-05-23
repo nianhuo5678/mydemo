@@ -1,15 +1,13 @@
 # -*- encoding: utf-8 -*-
 from rest_framework import serializers
-from models import User, Article, Comment
+from models import Author, Article, Comment
 
 
-class UserSerializer(serializers.ModelSerializer):
+class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = Author
         fields = (
-            'username',
-            'password',
-            'is_admin',
+            'name',
             'info',
         )
 
@@ -20,7 +18,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         model = Article
         fields = (
             'title',
-            'user',
+            'author',
             'content',
             'pub_date',
         )
@@ -30,7 +28,7 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = (
-            'user',
+            'author',
             'article',
             'content',
             'pub_date',

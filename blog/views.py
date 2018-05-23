@@ -1,12 +1,15 @@
 # -*- encoding: utf-8 -*-
 from rest_framework import viewsets
-from models import User, Article, Comment
-from serializers import UserSerializer, ArticleSerializer, CommentSerializer
+from models import Author, Article, Comment
+from serializers import AuthorSerializer, ArticleSerializer, CommentSerializer
+from django.contrib.auth import authenticate, login
+from django.http import HttpResponse
+
 
 # Create your views here.
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+class AuthorViewSet(viewsets.ModelViewSet):
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializer
 
 
 class ArticleViewSet(viewsets.ModelViewSet):
@@ -16,4 +19,4 @@ class ArticleViewSet(viewsets.ModelViewSet):
 
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
-    serializer_class = ArticleSerializer
+    serializer_class = CommentSerializer

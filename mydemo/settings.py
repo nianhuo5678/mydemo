@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 """
 Django settings for mydemo project.
 
@@ -89,7 +90,7 @@ DATABASES = {
     }
 }
 
-
+# 全部权限控制，要求所有接口需要登录
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
@@ -117,4 +118,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
-LOGIN_REDIRECT_URL = '/'
+# 登录成功后跳转的路径
+LOGIN_REDIRECT_URL = '/blog'

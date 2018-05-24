@@ -6,7 +6,8 @@ from models import Author, Article, Comment
 from serializers import AuthorSerializer, ArticleSerializer, CommentSerializer
 
 
-@permission_classes((IsAuthenticated,))
+# 单独要求一个接口需要登录
+# @permission_classes((IsAuthenticated,))
 class AuthorViewSet(viewsets.ModelViewSet):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer

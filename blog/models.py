@@ -2,10 +2,12 @@
 
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 
 class Author(models.Model):
-    name = models.TextField(max_length=30)
+    user = models.ForeignKey(User) # 登录的用户名
+    nickname = models.TextField(max_length=30, null=True)
     info = models.TextField(max_length=300, null=True)
 
     class Meta:

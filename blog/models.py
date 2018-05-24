@@ -5,8 +5,8 @@ from django.utils import timezone
 
 
 class Author(models.Model):
-    name = models.TextField(max_length=30, null=True)
-    info = models.TextField(max_length=300, null=True, blank=True)
+    name = models.TextField(max_length=30)
+    info = models.TextField(max_length=300, null=True)
 
     class Meta:
         ordering = ('id',)

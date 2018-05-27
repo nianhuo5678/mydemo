@@ -8,21 +8,27 @@ class AuthorSerializer(serializers.ModelSerializer):
         model = Author
         fields = (
             'user',
-            'nickname',
+            'name',
             'info',
         )
 
 
 class ArticleSerializer(serializers.ModelSerializer):
+    author_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Article
-        fields = (
-            'title',
-            'author',
-            'content',
-            'pub_date',
-        )
+        fields = ('id', 'title', 'author_name', 'content', 'pub_date')
+        read_only_fields = ('author',)
+
+    def get_author_name(self, obj):
+        return obj.author.__str__()
+
+    def create(self, validated_data):
+        authenticated_id = self.context['request'].user.id  # 获取当前登录用户的id(auth_user表)
+        validated_data['author'] = Author.objects.get(pk=authenticated_id)  # 通过id获取author对象
+        article = Article.objects.create(**validated_data)
+        return article
 
 
 class CommentSerializer(serializers.ModelSerializer):

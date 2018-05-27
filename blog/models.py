@@ -6,9 +6,12 @@ from django.contrib.auth.models import User
 
 
 class Author(models.Model):
-    user = models.ForeignKey(User) # 登录的用户名
-    nickname = models.TextField(max_length=30, null=True)
+    user = models.ForeignKey(User)  # 登录的用户名
+    name = models.TextField(max_length=30, null=True)
     info = models.TextField(max_length=300, null=True)
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         ordering = ('id',)
@@ -16,9 +19,9 @@ class Author(models.Model):
 
 class Article(models.Model):
     title = models.TextField(max_length=50)
-    author = models.ForeignKey(Author)
+    author = models.ForeignKey(Author, related_name='articles')
     content = models.TextField(max_length=2000)
-    pub_date = models.DateField(default=timezone.now)
+    pub_date = models.DateTimeField(default=timezone.now)
 
     class Meta:
         ordering = ('id',)
@@ -28,7 +31,7 @@ class Comment(models.Model):
     author = models.ForeignKey(Author)
     article = models.ForeignKey(Article)
     content = models.TextField(max_length=500)
-    pub_date = models.DateField(default=timezone.now)
+    pub_date = models.DateTimeField(default=timezone.now)
 
     class Meta:
         ordering = ('id',)

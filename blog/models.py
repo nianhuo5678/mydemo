@@ -3,12 +3,20 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+import const
 
 
 class Author(models.Model):
     user = models.ForeignKey(User)  # 登录的用户名
     name = models.TextField(max_length=30, null=True)
     info = models.TextField(max_length=300, null=True)
+    gender = models.IntegerField(
+        null=True,
+        choices=(
+            (const.Gender.Male.value, 'Male'),
+            (const.Gender.Female.value, 'Female')
+        )
+    )
 
     def __str__(self):
         return self.name
@@ -26,6 +34,14 @@ class Article(models.Model):
     class Meta:
         ordering = ('id',)
 
+    def __str__(self):
+        return self.title
+
+    def get_comment_by_me(self):
+        author_id = self.author_id
+        article_id = self.id
+        return Comment.objects.filter(author=author_id, article=article_id)
+
 
 class Comment(models.Model):
     author = models.ForeignKey(Author)
@@ -35,3 +51,4 @@ class Comment(models.Model):
 
     class Meta:
         ordering = ('id',)
+

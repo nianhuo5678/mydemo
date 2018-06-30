@@ -14,8 +14,11 @@ class AuthorViewSet(viewsets.ModelViewSet):
 
 
 class ArticleViewSet(viewsets.ModelViewSet):
-    queryset = Article.objects.all()
     serializer_class = ArticleSerializer
+
+    def get_queryset(self):
+        user_id = self.request.user.id
+        return Article.objects.filter(author=Author.objects.get(pk=user_id))
 
 
 class CommentViewSet(viewsets.ModelViewSet):

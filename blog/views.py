@@ -1,7 +1,5 @@
 # -*- encoding: utf-8 -*-
 from rest_framework import viewsets
-from rest_framework.decorators import permission_classes
-from rest_framework.permissions import IsAuthenticated
 from models import Author, Article, Comment
 from serializers import AuthorSerializer, ArticleSerializer, CommentSerializer
 
@@ -20,9 +18,21 @@ class ArticleViewSet(viewsets.ModelViewSet):
         user_id = self.request.user.id
         return Article.objects.filter(author=Author.objects.get(pk=user_id))
 
+    def perform_destroy(self, instance):
+        instance.is_deleted = True
+        instance.save()
+        print(instance.__str__() + " deleted")
+
 
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+
+    def perform_destroy(self, instance):
+        instance.is_deleted = True
+        instance.save()
+        print(instance.__str__() + " deleted")
+
+
 
 

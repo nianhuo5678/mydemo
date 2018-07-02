@@ -30,6 +30,7 @@ class Article(models.Model):
     author = models.ForeignKey(Author, related_name='articles')
     content = models.TextField(max_length=2000)
     pub_date = models.DateTimeField(default=timezone.now)
+    is_deleted = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('id',)
@@ -48,6 +49,7 @@ class Comment(models.Model):
     article = models.ForeignKey(Article)
     content = models.TextField(max_length=500)
     pub_date = models.DateTimeField(default=timezone.now)
+    is_deleted = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('id',)

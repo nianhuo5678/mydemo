@@ -32,13 +32,13 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class ArticleSerializer(serializers.ModelSerializer):
     author_name = serializers.SerializerMethodField()
-    # comments = CommentSerializer(many=True, source='comment_set')
+    comments = CommentSerializer(many=True, source='comment_set')
     # 只返回本文作者对于本文的评论
-    comments = CommentSerializer(many=True, source='get_comment_by_me')
+    # comments = CommentSerializer(many=True, source='get_comment_by_me')
 
     class Meta:
         model = Article
-        fields = ('id', 'title', 'author', 'pub_date', 'author_name', 'content', 'comments')
+        fields = ('id', 'title', 'author', 'pub_date', 'is_deleted', 'author_name', 'content', 'comments')
         read_only_fields = ('author', 'pub_date')
 
     @staticmethod

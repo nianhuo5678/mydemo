@@ -46,7 +46,7 @@ class Article(models.Model):
 
 class Comment(models.Model):
     author = models.ForeignKey(Author)
-    article = models.ForeignKey(Article)
+    article = models.ForeignKey(Article, related_name='article')
     content = models.TextField(max_length=500)
     pub_date = models.DateTimeField(default=timezone.now)
     is_deleted = models.BooleanField(default=False)

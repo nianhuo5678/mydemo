@@ -46,7 +46,7 @@ class Migration(migrations.Migration):
                 ('content', models.TextField(max_length=500)),
                 ('pub_date', models.DateTimeField(default=django.utils.timezone.now)),
                 ('is_deleted', models.BooleanField(default=False)),
-                ('article', models.ForeignKey(to='blog.Article')),
+                ('article', models.ForeignKey(related_name='article', to='blog.Article')),
                 ('author', models.ForeignKey(to='blog.Author')),
             ],
             options={

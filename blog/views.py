@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-from django.http import HttpResponse
+from permissions import ArticleDeleteUpdatePermissions
 from rest_framework import viewsets
 from models import Author, Article, Comment
 from serializers import AuthorSerializer, ArticleSerializer, CommentSerializer
@@ -15,6 +15,7 @@ class AuthorViewSet(viewsets.ModelViewSet):
 class ArticleViewSet(viewsets.ModelViewSet):
     serializer_class = ArticleSerializer
     queryset = Article.objects.all()
+    permission_classes = (ArticleDeleteUpdatePermissions,)
 
     # def get_queryset(self):
     #     # 只返回当前用户写的文章
@@ -22,9 +23,9 @@ class ArticleViewSet(viewsets.ModelViewSet):
     #     return Article.objects.filter(author=Author.objects.get(pk=user_id))
 
     def perform_destroy(self, instance):
+        # 标记删除文章
         instance.is_deleted = True
         instance.save()
-        print(instance.__str__() + " deleted")
 
     def perform_create(self, serializer):
         # 获取当前登陆用户作为文章作者

@@ -3,6 +3,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from mptt.models import MPTTModel, TreeForeignKey
 import const
 
 
@@ -44,12 +45,13 @@ class Article(models.Model):
         return Comment.objects.filter(author=author_id, article=article_id)
 
 
-class Comment(models.Model):
+class Comment(MPTTModel):
     author = models.ForeignKey(Author)
-    article = models.ForeignKey(Article, related_name='article')
+    article = models.ForeignKey(Article, related_name='comments')
     content = models.TextField(max_length=500)
     pub_date = models.DateTimeField(default=timezone.now)
     is_deleted = models.BooleanField(default=False)
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True, verbose_name='reply')
 
     class Meta:
         ordering = ('id',)

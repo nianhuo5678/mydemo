@@ -51,7 +51,7 @@ class Comment(MPTTModel):
     content = models.TextField(max_length=500)
     pub_date = models.DateTimeField(default=timezone.now)
     is_deleted = models.BooleanField(default=False)
-    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True, verbose_name='reply')
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True, verbose_name='引用')
 
     class Meta:
         ordering = ('id',)

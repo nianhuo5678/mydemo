@@ -35,10 +35,12 @@ class CommentSerializer(serializers.ModelSerializer):
         )
         read_only_fields = ('author', 'pub_date', 'is_deleted')
 
-    def get_author_name(self, obj):
+    @staticmethod
+    def get_author_name(obj):
         return obj.author.__str__()
 
-    def get_article_title(self, obj):
+    @staticmethod
+    def get_article_title(obj):
         return obj.article.__str__()
 
 

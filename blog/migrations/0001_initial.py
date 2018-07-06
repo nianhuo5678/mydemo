@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
+import mptt.fields
 import django.utils.timezone
 from django.conf import settings
 
@@ -46,8 +47,13 @@ class Migration(migrations.Migration):
                 ('content', models.TextField(max_length=500)),
                 ('pub_date', models.DateTimeField(default=django.utils.timezone.now)),
                 ('is_deleted', models.BooleanField(default=False)),
-                ('article', models.ForeignKey(related_name='article', to='blog.Article')),
+                ('lft', models.PositiveIntegerField(editable=False, db_index=True)),
+                ('rght', models.PositiveIntegerField(editable=False, db_index=True)),
+                ('tree_id', models.PositiveIntegerField(editable=False, db_index=True)),
+                ('level', models.PositiveIntegerField(editable=False, db_index=True)),
+                ('article', models.ForeignKey(related_name='comments', to='blog.Article')),
                 ('author', models.ForeignKey(to='blog.Author')),
+                ('parent', mptt.fields.TreeForeignKey(related_name='children', verbose_name=b'reply', blank=True, to='blog.Comment', null=True)),
             ],
             options={
                 'ordering': ('id',),

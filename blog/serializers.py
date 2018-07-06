@@ -19,14 +19,15 @@ class ParentNodeRelatedField(serializers.PrimaryKeyRelatedField):
     筛选可回复的评论：同一篇文章的所有评论（包括自己的评论）。
     """
     def get_queryset(self):
-        article = self.context.get('view').kwargs.get('article')
+        comment_id = self.context.get('view').kwargs.get('pk')
+        article = Comment.objects.get(id=comment_id).article
         return Comment.objects.filter(article=article)
 
 
 class CommentSerializer(serializers.ModelSerializer):
     author_name = serializers.SerializerMethodField()
     article_title = serializers.SerializerMethodField()
-    # parent = ParentNodeRelatedField(required=False, allow_null=True)
+    parent = ParentNodeRelatedField(required=False, allow_null=True)
 
     class Meta:
         model = Comment

@@ -26,15 +26,14 @@ class ParentNodeRelatedField(serializers.PrimaryKeyRelatedField):
 
 class CommentSerializer(serializers.ModelSerializer):
     author_name = serializers.SerializerMethodField()
-    article_title = serializers.SerializerMethodField()
+    # article_title = serializers.SerializerMethodField()
     parent = ParentNodeRelatedField(required=False, allow_null=True)
+    parents_list = serializers.SerializerMethodField()
 
     class Meta:
         model = Comment
-        fields = (
-            'author', 'author_name', 'article_title', 'article', 'id', 'is_deleted', 'content', 'pub_date', 'parent'
-        )
-        read_only_fields = ('author', 'pub_date', 'is_deleted')
+        fields = ('id', 'author', 'author_name', 'content', 'pub_date', 'parent', 'parents_list',)
+        read_only_fields = ('author', 'pub_date', 'is_deleted', 'parents_list')
 
     def get_author_name(self, obj):
         return obj.author.__str__()
@@ -42,14 +41,27 @@ class CommentSerializer(serializers.ModelSerializer):
     def get_article_title(self, obj):
         return obj.article.__str__()
 
+    def get_parents_list(self, obj):
+        ancestors = obj.get_ancestors(include_self=True)
+        ancestor_list = list()
+        for ancestor in ancestors:
+            ancestor_dict = dict()
+            ancestor_dict['author'] = ancestor.author.name
+            ancestor_dict['content'] = ancestor.content
+            ancestor_list.append(ancestor_dict)
+        return ancestor_list
+
 
 class ArticleSerializer(serializers.ModelSerializer):
     author_name = serializers.SerializerMethodField()
-    comments = CommentSerializer(many=True, read_only=True)
+    # comments = CommentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Article
-        fields = ('id', 'title', 'author', 'pub_date', 'is_deleted', 'author_name', 'content', 'comments')
+        fields = (
+            'id', 'title', 'author', 'pub_date', 'is_deleted', 'author_name', 'content',
+            # 'comments'
+                  )
         read_only_fields = ('author', 'pub_date', 'is_deleted')
 
     @staticmethod

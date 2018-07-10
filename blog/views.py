@@ -30,7 +30,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
 
 
 class CommentViewSet(viewsets.ModelViewSet):
-    queryset = Comment.objects.all()
+    queryset = Comment.objects.filter(is_deleted=False)
     serializer_class = CommentSerializer
     # permission_classes = (CommentDeleteUpdatePermissions,)
 

@@ -31,11 +31,13 @@ class ArticleViewSet(viewsets.ModelViewSet):
 
 class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
-    # permission_classes = (CommentDeleteUpdatePermissions,)
 
     def get_queryset(self):
         article = Article.objects.get(id=self.kwargs['article_id'])
-        return Comment.objects.filter(is_deleted=False, article=article)
+        return Comment.objects.filter(
+            # is_deleted=False,
+            article=article
+        )
 
     def perform_create(self, serializer):
         serializer.save(

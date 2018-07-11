@@ -16,22 +16,40 @@ class AuthorSerializer(serializers.ModelSerializer):
 
 class ParentNodeRelatedField(serializers.PrimaryKeyRelatedField):
     """
-    筛选可回复的评论：同一篇文章的所有评论（包括自己的评论）。
+    筛选可回复的评论：
+    1、同一篇文章的所有评论（包括自己的评论）
+    2、已经被删除的评论不能回复
     """
     def get_queryset(self):
         article = Article.objects.get(id=self.context['view'].kwargs['article_id'])
-        return Comment.objects.filter(article=article)
+        return Comment.objects.filter(article=article, is_deleted=False)
+
+
+class MethodSerializerField(serializers.Field):
+
+    def to_internal_value(self, data):
+        return data
+
+    def to_representation(self, value):
+        print('ssss')
+        comment_id = self.context['view'].kwargs['pk']
+        comment = Comment.objects.get(id=comment_id)
+        if comment.is_deleted:
+            value = 'comment deleted'
+            return value
+        else:
+            return value
 
 
 class CommentSerializer(serializers.ModelSerializer):
     author_name = serializers.SerializerMethodField()
-    # article_title = serializers.SerializerMethodField()
     parent = ParentNodeRelatedField(required=False, allow_null=True)
     parents_list = serializers.SerializerMethodField()
+    content = MethodSerializerField()
 
     class Meta:
         model = Comment
-        fields = ('id', 'author', 'author_name', 'content', 'pub_date', 'parent', 'parents_list',)
+        fields = ('id', 'author', 'author_name', 'content', 'pub_date', 'parent', 'parents_list', 'is_deleted')
         read_only_fields = ('author', 'pub_date', 'is_deleted', 'parents_list')
 
     def get_author_name(self, obj):

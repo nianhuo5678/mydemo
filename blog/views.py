@@ -30,13 +30,17 @@ class ArticleViewSet(viewsets.ModelViewSet):
 
 
 class CommentViewSet(viewsets.ModelViewSet):
-    queryset = Comment.objects.filter(is_deleted=False)
     serializer_class = CommentSerializer
     # permission_classes = (CommentDeleteUpdatePermissions,)
 
+    def get_queryset(self):
+        article = Article.objects.get(id=self.kwargs['article_id'])
+        return Comment.objects.filter(is_deleted=False, article=article)
+
     def perform_create(self, serializer):
         serializer.save(
-            author=Author.objects.get(pk=self.request.user.id)
+            author=Author.objects.get(pk=self.request.user.id),
+            article=Article.objects.get(pk=self.kwargs['article_id'])
         )
 
     def perform_destroy(self, instance):

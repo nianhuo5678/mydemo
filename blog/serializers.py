@@ -19,27 +19,23 @@ class ParentNodeRelatedField(serializers.PrimaryKeyRelatedField):
     筛选可回复的评论：同一篇文章的所有评论（包括自己的评论）。
     """
     def get_queryset(self):
-        comment_id = self.context.get('view').kwargs.get('pk')
-        article = Comment.objects.get(id=comment_id).article
+        article_id = self.context.get('view').kwargs.get('article_id')
+        article = Article.objects.get(id=article_id)
         return Comment.objects.filter(article=article)
 
 
 class CommentSerializer(serializers.ModelSerializer):
     author_name = serializers.SerializerMethodField()
-    # article_title = serializers.SerializerMethodField()
     parent = ParentNodeRelatedField(required=False, allow_null=True)
     parents_list = serializers.SerializerMethodField()
 
     class Meta:
         model = Comment
-        fields = ('id', 'author', 'author_name', 'content', 'pub_date', 'parent', 'parents_list',)
-        read_only_fields = ('author', 'pub_date', 'is_deleted', 'parents_list')
+        fields = ('id', 'author_name', 'article', 'content', 'pub_date', 'parent', 'parents_list',)
+        read_only_fields = ('author_name', 'pub_date', 'article', 'is_deleted', 'parents_list')
 
     def get_author_name(self, obj):
         return obj.author.__str__()
-
-    def get_article_title(self, obj):
-        return obj.article.__str__()
 
     def get_parents_list(self, obj):
         ancestors = obj.get_ancestors(include_self=True)
@@ -54,14 +50,11 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class ArticleSerializer(serializers.ModelSerializer):
     author_name = serializers.SerializerMethodField()
-    # comments = CommentSerializer(many=True, read_only=True)
+    comments = CommentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Article
-        fields = (
-            'id', 'title', 'author', 'pub_date', 'is_deleted', 'author_name', 'content',
-            # 'comments'
-                  )
+        fields = ('id', 'title', 'author', 'pub_date', 'is_deleted', 'author_name', 'content', 'comments')
         read_only_fields = ('author', 'pub_date', 'is_deleted')
 
     @staticmethod

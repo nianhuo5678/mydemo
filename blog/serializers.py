@@ -27,18 +27,19 @@ class ParentNodeRelatedField(serializers.PrimaryKeyRelatedField):
 
 class MethodSerializerField(serializers.Field):
 
+    def get_attribute(self, obj):
+        # We pass the object instance onto `to_representation`,
+        # not just the field attribute.
+        return obj
+
     def to_internal_value(self, data):
         return data
 
-    def to_representation(self, value):
-        print('ssss')
-        comment_id = self.context['view'].kwargs['pk']
-        comment = Comment.objects.get(id=comment_id)
-        if comment.is_deleted:
-            value = 'comment deleted'
-            return value
+    def to_representation(self, obj):
+        if obj.is_deleted:
+            return 'comment deleted'
         else:
-            return value
+            return obj.content
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -63,8 +64,11 @@ class CommentSerializer(serializers.ModelSerializer):
         ancestor_list = list()
         for ancestor in ancestors:
             ancestor_dict = dict()
-            ancestor_dict['author'] = ancestor.author.name
-            ancestor_dict['content'] = ancestor.content
+            if ancestor.is_deleted:
+                ancestor_dict['content'] = 'comment deleted'
+            else:
+                ancestor_dict['author'] = ancestor.author.name
+                ancestor_dict['content'] = ancestor.content
             ancestor_list.append(ancestor_dict)
         return ancestor_list
 

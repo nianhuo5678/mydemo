@@ -75,14 +75,10 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class ArticleSerializer(serializers.ModelSerializer):
     author_name = serializers.SerializerMethodField()
-    comments = CommentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Article
-        fields = (
-            'id', 'title', 'author', 'pub_date', 'is_deleted', 'author_name', 'content',
-            'comments'
-                  )
+        fields = ('id', 'title', 'author', 'pub_date', 'is_deleted', 'author_name', 'content',)
         read_only_fields = ('author', 'pub_date', 'is_deleted')
 
     @staticmethod

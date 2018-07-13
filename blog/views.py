@@ -3,6 +3,7 @@ from permissions import ArticleDeleteUpdatePermissions, CommentDeleteUpdatePermi
 from rest_framework import viewsets
 from models import Author, Article, Comment
 from serializers import AuthorSerializer, ArticleSerializer, CommentSerializer
+from rest_framework_extensions.cache.mixins import CacheResponseMixin
 
 
 # 单独要求一个接口需要登录
@@ -12,7 +13,7 @@ class AuthorViewSet(viewsets.ModelViewSet):
     serializer_class = AuthorSerializer
 
 
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet(CacheResponseMixin, viewsets.ModelViewSet):
     serializer_class = ArticleSerializer
     queryset = Article.objects.all()
     permission_classes = (ArticleDeleteUpdatePermissions,)
@@ -29,7 +30,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
         )
 
 
-class CommentViewSet(viewsets.ModelViewSet):
+class CommentViewSet(CacheResponseMixin, viewsets.ModelViewSet):
 
     serializer_class = CommentSerializer
 

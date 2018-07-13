@@ -50,19 +50,16 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ('id', 'author', 'author_name', 'content', 'pub_date', 'parent', 'parents_list')
+        fields = ('id', 'author', 'author_name', 'content', 'pub_date', 'parent', 'parents_list',)
         read_only_fields = ('author', 'pub_date', 'parents_list')
 
-    @staticmethod
-    def get_author_name(obj):
+    def get_author_name(self, obj):
         return obj.author.__str__()
 
-    @staticmethod
-    def get_article_title(obj):
+    def get_article_title(self, obj):
         return obj.article.__str__()
 
-    @staticmethod
-    def get_parents_list(obj):
+    def get_parents_list(self, obj):
         ancestors = obj.get_ancestors(include_self=True)
         ancestor_list = list()
         for ancestor in ancestors:

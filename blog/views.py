@@ -30,6 +30,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
 
 
 class CommentViewSet(viewsets.ModelViewSet):
+
     serializer_class = CommentSerializer
 
     def get_queryset(self):

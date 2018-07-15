@@ -14,9 +14,11 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from blog.urls import router as blog_router
+from school.urls import router as student_router
 
 
 urlpatterns = [
-    url(r'^blog/', include(blog_router.urls)),
+    # url(r'^blog/', include(blog_router.urls)),
+    url(r'^school/', include(student_router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-from permissions import ArticleDeleteUpdatePermissions, CommentDeleteUpdatePermissions
+from permissions import ArticleDeleteUpdatePermissions
 from rest_framework import viewsets
 from models import Author, Article, Comment
 from serializers import AuthorSerializer, ArticleSerializer, CommentSerializer

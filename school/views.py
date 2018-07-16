@@ -41,10 +41,12 @@ class StudentViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
 
-    # @cache_response(key_func=CustomObjectKeyConstructor)
+    @cache_response(key_func=CustomListKeyConstructor())
+    def list(self, *args, **kwargs):
+        return super(StudentViewSet, self).list(*args, **kwargs)
+
+    @cache_response(key_func=CustomObjectKeyConstructor())
     def retrieve(self, *args, **kwargs):
         return super(StudentViewSet, self).retrieve(*args, **kwargs)
 
-    @cache_response(key_func=CustomListKeyConstructor)
-    def list(self, *args, **kwargs):
-        return super(StudentViewSet, self).list(*args, **kwargs)
+

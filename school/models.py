@@ -1,6 +1,11 @@
 from django.db import models
 import datetime
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import (
+    post_save,
+    post_delete,
+)
+
+
 from django.core.cache import cache
 
 

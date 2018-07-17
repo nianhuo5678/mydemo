@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 from django.core.cache import cache
-from rest_framework_extensions.cache.decorators import cache_response
+from rest_framework_extensions.cache.mixins import CacheResponseMixin
 from django.utils.encoding import force_text
 from models import Student
 from serializers import StudentSerializer
@@ -11,9 +11,7 @@ from rest_framework_extensions.key_constructor.bits import (
     PaginationKeyBit
 )
 import datetime
-from rest_framework_extensions.key_constructor.constructors import (
-    DefaultKeyConstructor
-)
+from rest_framework_extensions.key_constructor.constructors import DefaultKeyConstructor
 
 
 class UpdatedAtKeyBit(KeyBitBase):
@@ -37,16 +35,11 @@ class CustomListKeyConstructor(DefaultKeyConstructor):
     updated_at = UpdatedAtKeyBit()
 
 
-class StudentViewSet(viewsets.ModelViewSet):
+class StudentViewSet(CacheResponseMixin, viewsets.ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+    object_cache_key_func = CustomObjectKeyConstructor()
+    list_cache_key_func = CustomListKeyConstructor()
 
-    @cache_response(key_func=CustomListKeyConstructor())
-    def list(self, *args, **kwargs):
-        return super(StudentViewSet, self).list(*args, **kwargs)
-
-    @cache_response(key_func=CustomObjectKeyConstructor())
-    def retrieve(self, *args, **kwargs):
-        return super(StudentViewSet, self).retrieve(*args, **kwargs)
 
 

@@ -21,6 +21,6 @@ class Student(models.Model):
         ordering = ('id',)
 
 
-for model in [Student]:
+for model in [Student, ]:
     post_save.connect(receiver=change_api_updated_at, sender=model)
     post_delete.connect(receiver=change_api_updated_at, sender=model)

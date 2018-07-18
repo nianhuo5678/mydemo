@@ -18,7 +18,7 @@ from school.urls import router as student_router
 
 
 urlpatterns = [
-    # url(r'^blog/', include(blog_router.urls)),
+    url(r'^blog/', include(blog_router.urls)),
     url(r'^school/', include(student_router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

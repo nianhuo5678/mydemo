@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'blog',
     'mptt',
     'school',
+    'cacheops',
 )
 
 REST_FRAMEWORK_EXTENSIONS = {
@@ -96,18 +97,17 @@ DATABASES = {
     }
 }
 
-# Cache
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/0",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        },
-        'TIMEOUT': None
-    }
+# CACHEOPS
+CACHEOPS_REDIS = "redis://127.0.0.1:6379/0"
+CACHEOPS_DEFAULTS = {
+    'timeout': 60*60*24
 }
-
+CACHEOPS = {
+    'school.student': {'ops': {'get', 'fetch'}},
+    'blog.author': {'ops': {'get', 'fetch'}},
+    'blog.article': {'ops': {'get', 'fetch'}},
+    'blog.comment': {'ops': {'get', 'fetch'}},
+}
 
 # 全部权限控制，要求所有接口需要登录
 REST_FRAMEWORK = {

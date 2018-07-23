@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 from rest_framework import serializers
 from models import Author, Article, Comment
-
+from cacheops import cached_as
 
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
@@ -59,6 +59,7 @@ class CommentSerializer(serializers.ModelSerializer):
     def get_article_title(self, obj):
         return obj.article.__str__()
 
+    @cached_as(Comment, timeout=60*60)
     def get_parents_list(self, obj):
         ancestors = obj.get_ancestors(include_self=True)
         ancestor_list = list()
